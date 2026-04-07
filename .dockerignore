@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+.env.example
+*.md
+logs.txt
+data/
+implementation_plan.md
+.dockerignore

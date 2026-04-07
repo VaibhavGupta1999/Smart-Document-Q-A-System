@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Document Q&A System - Upload documents and ask questions powered by AI">
+    <title>DocuMind AI - Smart Document Q&A</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="main-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+                        <path d="M8 10h16M8 16h12M8 22h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="24" cy="22" r="4" fill="white" fill-opacity="0.3"/>
+                        <path d="M23 21.5l1 1 2-2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
+                                <stop stop-color="#6366f1"/>
+                                <stop offset="1" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">DocuMind<span class="logo-ai">AI</span></span>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="upload" id="nav-upload">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload
+                </button>
+                <button class="nav-tab" data-tab="qa" id="nav-qa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Ask Questions
+                </button>
+                <button class="nav-tab" data-tab="documents" id="nav-documents">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    Documents
+                </button>
+            </nav>
+            <div class="header-status">
+                <div class="status-dot"></div>
+                <span>System Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Upload Tab -->
+        <section class="tab-content active" id="tab-upload">
+            <div class="section-header">
+                <h1>Upload Documents</h1>
+                <p>Upload PDF or DOCX files to start asking questions about their content</p>
+            </div>
+            <div class="upload-zone" id="upload-zone">
+                <div class="upload-zone-inner">
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <h3>Drag & Drop your files here</h3>
+                    <p>or click to browse</p>
+                    <div class="upload-formats">
+                        <span class="format-badge">PDF</span>
+                        <span class="format-badge">DOCX</span>
+                        <span class="format-limit">Max 50MB</span>
+                    </div>
+                    <input type="file" id="file-input" accept=".pdf,.docx" hidden>
+                </div>
+            </div>
+            <div class="upload-progress-container" id="upload-progress-container" style="display:none;">
+                <div class="upload-progress-card">
+                    <div class="upload-file-info">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <div>
+                            <span class="upload-filename" id="upload-filename"></span>
+                            <span class="upload-filesize" id="upload-filesize"></span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="upload-progress-bar"></div>
+                    </div>
+                    <span class="upload-status-text" id="upload-status-text">Uploading...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Q&A Tab -->
+        <section class="tab-content" id="tab-qa">
+            <div class="qa-layout">
+                <!-- Sidebar: Document Selector -->
+                <aside class="qa-sidebar">
+                    <h3>Select Document</h3>
+                    <div class="document-selector" id="document-selector">
+                        <p class="empty-state">No documents ready yet. Upload one first!</p>
+                    </div>
+                </aside>
+                <!-- Chat Area -->
+                <div class="qa-chat-area">
+                    <div class="chat-header">
+                        <div class="chat-doc-name" id="chat-doc-name">Select a document to begin</div>
+                        <button class="btn-new-chat" id="btn-new-chat" title="New conversation">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            New Chat
+                        </button>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-welcome">
+                            <div class="welcome-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            </div>
+                            <h3>Start a Conversation</h3>
+                            <p>Select a document and ask questions about its content.<br>The AI will answer based only on the document.</p>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <div class="chat-input-wrapper">
+                            <textarea class="chat-input" id="chat-input" placeholder="Ask a question about the document..." rows="1" disabled></textarea>
+                            <button class="btn-send" id="btn-send" disabled>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                        <div class="chat-input-hint">Press Enter to send · Shift+Enter for new line</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documents Tab -->
+        <section class="tab-content" id="tab-documents">
+            <div class="section-header">
+                <h1>Your Documents</h1>
+                <p>Manage and monitor all uploaded documents</p>
+            </div>
+            <div class="documents-grid" id="documents-grid">
+                <div class="empty-state-card">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <h3>No documents yet</h3>
+                    <p>Upload your first document to get started</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
