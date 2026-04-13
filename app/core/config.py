@@ -9,12 +9,16 @@ class Settings(BaseSettings):
     """
     Application configuration.
     
-    Only GROQ_API_KEY is loaded from the environment/env file.
+    Only GROQ_API_KEY and HF_API_TOKEN are loaded from the environment/env file.
     All other settings are hardcoded into the system for consistency.
     """
 
-    # Groq - The only dynamic environment variable
+    # API Keys - Dynamic environment variables
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    HF_API_TOKEN: str = os.getenv("HF_API_TOKEN", "")
+
+    # HuggingFace Inference API configuration
+    HF_API_URL: str = "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2"
 
     # Hardcoded Database configuration
     DATABASE_URL: str = "sqlite:///./data/docqa.db"
