@@ -3,6 +3,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
 
 # Set work directory
 WORKDIR /app
@@ -10,7 +11,6 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -26,8 +26,8 @@ COPY . .
 # Create data directories
 RUN mkdir -p /app/data/uploads /app/data/faiss_index
 
-# Expose port
-EXPOSE 8000
+# Expose port (Render sets PORT dynamically)
+EXPOSE ${PORT}
 
-# Default command (overridden in docker-compose for worker)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Production command — uses Render's dynamic $PORT
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT}

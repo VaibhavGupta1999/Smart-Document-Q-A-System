@@ -1,0 +1,28 @@
+# Render Blueprint — one-click deploy configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: documind-ai
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false  # You'll set this manually in Render dashboard
+      - key: DATABASE_URL
+        value: sqlite:///./data/docqa.db
+      - key: EMBEDDING_MODEL
+        value: all-MiniLM-L6-v2
+      - key: FAISS_INDEX_PATH
+        value: ./data/faiss_index
+      - key: UPLOAD_DIR
+        value: ./data/uploads
+      - key: LLM_MODEL
+        value: meta-llama/llama-4-scout-17b-16e-instruct
+      - key: LLM_MAX_TOKENS
+        value: "4000"
+    disk:
+      name: documind-data
+      mountPath: /app/data
+      sizeGB: 1
