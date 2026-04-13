@@ -1,46 +1,45 @@
-"""
-Application configuration using Pydantic Settings.
-
-Loads environment variables from .env file and validates them.
-"""
-
+import os
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
 
+# Load .env file to allow GROQ_API_KEY to be picked up if present
+load_dotenv()
 
 class Settings(BaseSettings):
-    """Application settings loaded from environment variables."""
+    """
+    Application configuration.
+    
+    Only GROQ_API_KEY is loaded from the environment/env file.
+    All other settings are hardcoded into the system for consistency.
+    """
 
-    # Groq
-    GROQ_API_KEY: str = ""
+    # Groq - The only dynamic environment variable
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
 
-    # Database (SQLite by default for local dev)
+    # Hardcoded Database configuration
     DATABASE_URL: str = "sqlite:///./data/docqa.db"
 
-    # Embedding model
+    # Hardcoded Embedding Model
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
 
-    # FAISS index storage path
+    # Hardcoded FAISS storage path
     FAISS_INDEX_PATH: str = "./data/faiss_index"
 
-    # Upload directory
+    # Hardcoded Upload Storage
     UPLOAD_DIR: str = "./data/uploads"
 
-    # LLM settings (Groq + llama)
+    # Hardcoded LLM settings
     LLM_MODEL: str = "meta-llama/llama-4-scout-17b-16e-instruct"
     LLM_MAX_TOKENS: int = 4000
 
-    # Chunking settings
-    CHUNK_SIZE: int = 600  # tokens (500-800 range)
-    CHUNK_OVERLAP: int = 120  # tokens (100-150 range)
-
-    # Retrieval settings
+    # Internal logic settings
+    CHUNK_SIZE: int = 600
+    CHUNK_OVERLAP: int = 120
     TOP_K: int = 5
-
-    # Embedding dimension for all-MiniLM-L6-v2
     EMBEDDING_DIM: int = 384
 
     class Config:
-        env_file = ".env"
+        # We handle .env loading manually above to ensure only chosen vars are dynamic
         case_sensitive = True
 
 
